@@ -17,7 +17,8 @@
                 <select class="form-select" id="opciones" aria-label="Selecciona una opción" name="metodo">
                     <option value="newton" {% if metodo == 'newton' %}selected{% endif %}>Newton</option>
 				    <option value="secante" {% if metodo == 'secante' %}selected{% endif %}>Secante</option>
-				    <option value="opcion3" {% if metodo == 'opcion3' %}selected{% endif %}>Opción 3</option>
+				    <option value="biseccion" {% if metodo == 'biseccion' %}selected{% endif %}>Biseccion</option>
+                    <option value="puntofijo" {% if metodo == 'puntofijo' %}selected{% endif %}>Punto Fijo</option>
                 </select>
             </div>
             <input type="submit" class="btn btn-primary" value="Seleccionar método"> 

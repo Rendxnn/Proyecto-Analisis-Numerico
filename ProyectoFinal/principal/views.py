@@ -3,13 +3,14 @@ from django.http import JsonResponse
 from .metodos import *
 import json
 import inspect
-
 from .utils import newton 
 from .utils import secante
+from .utils import biseccion
+from .utils import puntofijo
 
 
 def home(request):
-    metodos_diccionario = {"newton": newton.newton_method, "secante": secante.metodo_secante}
+    metodos_diccionario = {"newton": newton.newton_method, "secante": secante.metodo_secante, "biseccion": biseccion.biseccion_method, "puntofijo": puntofijo.puntofijo_method}
     metodo = request.GET.get("metodo")
     variables_metodo = None
     tabla_resultado = None
