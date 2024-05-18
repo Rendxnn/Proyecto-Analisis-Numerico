@@ -7,10 +7,12 @@ from .utils import newton
 from .utils import secante
 from .utils import biseccion
 from .utils import puntofijo
+from .utils import busquedaincremental
+from .utils import reglafalsa
 
 
 def home(request):
-    metodos_diccionario = {"newton": newton.newton_method, "secante": secante.metodo_secante, "biseccion": biseccion.biseccion_method, "puntofijo": puntofijo.puntofijo_method}
+    metodos_diccionario = {"newton": newton.newton_method, "secante": secante.metodo_secante, "biseccion": biseccion.biseccion_method, "puntofijo": puntofijo.puntofijo_method, "busquedaincremental": busquedaincremental.busquedaincremental_method, "reglafalsa": reglafalsa.reglafalsa_method }
     metodo = request.GET.get("metodo")
     variables_metodo = None
     tabla_resultado = None
