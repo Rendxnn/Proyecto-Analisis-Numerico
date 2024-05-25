@@ -1,7 +1,7 @@
 import pandas as pd
 import sympy as sp
 
-def busquedaincremental_method(Fun, X0, Delta, Niter):
+def busquedaincremental_method(funcion, X0, Delta, Niter):
     X0 = float(X0)
     Delta = float(Delta)
     Niter = int(Niter)
@@ -13,7 +13,7 @@ def busquedaincremental_method(Fun, X0, Delta, Niter):
 
     # Convertimos la cadena de la función a una expresión sympy
     x = sp.symbols('x')
-    func = sp.sympify(Fun)
+    func = sp.sympify(funcion)
 
     # Evaluamos la función en el punto inicial
     f0 = func.subs(x, X0)

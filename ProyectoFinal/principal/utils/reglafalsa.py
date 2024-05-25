@@ -2,7 +2,7 @@ import pandas as pd
 import sympy as sp
 import cmath
 
-def reglafalsa_method(Xi, Xs, Tol, Niter, Fun):
+def reglafalsa_method(funcion, Xi, Xs, Tol, Niter):
     # Convertir los parámetros a los tipos adecuados
     Xi = float(Xi)
     Xs = float(Xs)
@@ -11,7 +11,7 @@ def reglafalsa_method(Xi, Xs, Tol, Niter, Fun):
 
     # Crear la variable simbólica y la función a partir de la cadena
     x = sp.symbols('x')
-    func = sp.sympify(Fun)
+    func = sp.sympify(funcion)
     f = sp.lambdify(x, func, "sympy")
 
     data = []  # Lista para almacenar los datos de cada iteración

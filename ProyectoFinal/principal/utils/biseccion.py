@@ -3,7 +3,7 @@ import numpy as np
 import math
 import sympy as sp
 
-def biseccion_method(Xi, Xs, Tol, Niter, Funcion):
+def biseccion_method(funcion, Xi, Xs, Tol, Niter):
     # Inicializamos listas para almacenar datos de cada iteración
     Xi = int(Xi)
     Xs = int(Xs)
@@ -16,7 +16,7 @@ def biseccion_method(Xi, Xs, Tol, Niter, Funcion):
 
     # Convertimos la cadena de la función a una expresión sympy
     x = sp.symbols('x')
-    func = sp.sympify(Funcion)
+    func = sp.sympify(funcion)
 
     # Evaluamos la función en los extremos del intervalo
     fi = func.subs(x, Xi)
