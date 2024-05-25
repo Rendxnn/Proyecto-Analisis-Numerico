@@ -2,74 +2,77 @@ import pandas as pd
 import sympy as sp
 import cmath
 
-def reglafalsa_method(texto_funcion, a, b, tol, max_iteraciones):
-    # Inicializar variables
-    count = 1
+def reglafalsa_method(Xi, Xs, Tol, Niter, Fun):
+    # Convertir los parámetros a los tipos adecuados
+    Xi = float(Xi)
+    Xs = float(Xs)
+    Tol = float(Tol)
+    Niter = int(Niter)
 
-    # Verificar errores
-    if max_iteraciones < 0:
-        raise ValueError(f"El número máximo de iteraciones es < 0: iteraciones = {max_iteraciones}")
-    if a >= b:
-        raise ValueError(f"a tiene que ser menor que b: a = {a} ^ b = {b}")
-
-    # Definir la función
+    # Crear la variable simbólica y la función a partir de la cadena
     x = sp.symbols('x')
-    funcion = sp.sympify(texto_funcion)
+    func = sp.sympify(Fun)
+    f = sp.lambdify(x, func, "sympy")
 
-    # Evaluar la función en a y b
-    f_a = funcion.subs(x, a)
-    f_b = funcion.subs(x, b)
+    data = []  # Lista para almacenar los datos de cada iteración
+    fm = []
+    E = []
+    Xmar = []
 
-    # Verificar si f(a) o f(b) es imaginario
-    if cmath.phase(f_a) != 0:
-        raise ValueError(f"a no está definido en el dominio de la función: a = {a}")
-    if cmath.phase(f_b) != 0:
-        raise ValueError(f"b no está definido en el dominio de la función: b = {b}")
+    # Evaluar la función en los extremos del intervalo
+    fi = f(Xi)
+    fs = f(Xs)
 
-    if tol < 0:
-        raise ValueError(f"tol es un valor incorrecto: tol = {tol}")
+    # Verificar si alguno de los extremos es raíz
+    if fi == 0:
+        s = Xi
+        E = 0
+        print(Xi, "es raíz de f(x)")
+    elif fs == 0:
+        s = Xs
+        E = 0
+        print(Xs, "es raíz de f(x)")
+    elif fs * fi < 0:
+        c = 0
+        Xm = Xs - ((fs * (Xs - Xi)) / (fs - fi))
+        Xmar.append(Xm)
+        fe = f(Xm)
+        fm.append(fe)
+        E.append(100)
+        while E[c] > Tol and fe != 0 and c < Niter:
+            if fi * fe < 0:
+                Xs = Xm
+                fs = f(Xs)
+            else:
+                Xi = Xm
+                fi = f(Xi)
 
-    # Inicializar variables
-    x_r = b - (f_b * (a - b)) / (f_a - f_b)
-    f_xr = funcion.subs(x, x_r)
-    error = tol + 1
-    temp = 0
+            Xa = Xm
+            Xm = Xs - ((fs * (Xs - Xi)) / (fs - fi))
+            Xmar.append(Xm)
+            fe = f(Xm)
+            fm.append(fe)
+            Error = abs((Xm - Xa) / Xm)
+            E.append(Error)
+            c = c + 1
+            data.append([c, Xm, fe, "{:.15f}".format(Error)])  # Formateo del error
 
-    # Inicializar DataFrame
-    data = {'Iteración': [count], 'a': [a], 'x_r': [x_r], 'b': [b], 'f(x_r)': [f_xr], 'error': [""], 'conclusión': [""]}
-    df = pd.DataFrame(data)
+            if fe == 0:
+                s = Xm
+                print(s, "es raíz de f(x)", "En iteraciones: ", c + 1)
+            elif Error < Tol:
+                s = Xm
+                print(s, "es una aproximación de una raíz de f(x) con una tolerancia", Tol, "En iteraciones: ", c + 1)
+            elif c == Niter:
+                s = Xm
+                print("Fracaso en ", Niter, " iteraciones ")
 
-    # Bucle principal
-    while error > tol and count < max_iteraciones:
-        if f_xr < 0:
-            a = x_r
-        if f_xr > 0:
-            b = x_r
-
-        count += 1
-        temp = x_r
-        x_r = b - (f_b * (a - b)) / (f_a - f_b)
-        f_xr = funcion.subs(x, x_r)
-        error = abs(x_r - temp)
-
-        f_a = funcion.subs(x, a)
-        f_b = funcion.subs(x, b)
-
-        if cmath.phase(f_a) != 0:
-            raise ValueError(f"a no está definido en el dominio de la función: a = {a}")
-        if cmath.phase(f_b) != 0:
-            raise ValueError(f"b no está definido en el dominio de la función: b = {b}")
-
-        df = df.append({'Iteración': count, 'a': a, 'x_r': x_r, 'b': b, 'f(x_r)': f_xr, 'error': error, 'conclusión': ""}, ignore_index=True)
-
-    # Definir conclusion
-    if error < tol:
-        conclusion = f"Se encontró una aproximación de la raíz para m = {x_r}"
-    elif error > tol:
-        conclusion = "Dado el número de iteraciones y la tolerancia, fue imposible encontrar una raíz satisfactoria"
     else:
-        conclusion = "El método explotó"
+        print("El intervalo es inadecuado")
 
-    df.at[count-1, 'conclusión'] = conclusion
-
+    # Crear un DataFrame con los datos recopilados
+    df = pd.DataFrame(data, columns=['Iteración', 'Xm', 'f(Xm)', 'Error'])
     return df
+
+# Ejemplo de uso:
+# print(reglafalsa_method(0, 2, 0.0001, 100, "x**3 - 2*x**2 + x - 3"))
