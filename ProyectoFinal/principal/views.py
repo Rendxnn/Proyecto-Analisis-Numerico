@@ -9,10 +9,11 @@ from .utils import biseccion
 from .utils import puntofijo
 from .utils import busquedaincremental
 from .utils import reglafalsa
+from .utils import raicesmultiples2
 
 
 def home(request):
-    metodos_diccionario = {"newton": newton.newton_method, "secante": secante.metodo_secante, "biseccion": biseccion.biseccion_method, "puntofijo": puntofijo.puntofijo_method, "busquedaincremental": busquedaincremental.busquedaincremental_method, "reglafalsa": reglafalsa.reglafalsa_method }
+    metodos_diccionario = {"newton": newton.newton_method, "secante": secante.metodo_secante, "biseccion": biseccion.biseccion_method, "puntofijo": puntofijo.puntofijo_method, "busquedaincremental": busquedaincremental.busquedaincremental_method, "reglafalsa": reglafalsa.reglafalsa_method, "raicesmultiples2": raicesmultiples2.raicesmultiples_method  }
     metodo = request.GET.get("metodo")
     variables_metodo = None
     tabla_resultado = None
