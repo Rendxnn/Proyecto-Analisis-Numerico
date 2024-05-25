@@ -1,58 +1,92 @@
 import pandas as pd
 import numpy as np
 import math
+import sympy as sp
 
-def biseccion_method(Xi, Xs, Tol, Niter, Fun):
-    data = [] # This will store our data
-    x=Xi #Indica el valor de x, siendo este el primero del intervalo
-    fi=eval(Fun) #Evalua la funcion en el valor de x inicial
+def metodo_biseccion(Xi, Xs, Tol, Niter, Funcion):
+    # Inicializamos listas para almacenar datos de cada iteración
+    Xi = int(Xi)
+    Xs = int(Xs)
+    Niter = int(Niter)
+    Tol = float(Tol)
 
-    x=Xs
-    fs=eval(Fun) #Evalua la funcion en el valor de x final
+    Xmar = []
+    fm = []
+    E = []
 
-    if fi==0:
-        s=Xi
-        E=0
-        data.append([0, Xi, fi, E])
-    elif fs==0:
-        s=Xs
-        E=0
-        data.append([0, Xs, fs, E])
-    elif fs*fi<0: #Si la multiplicacion de las funciones es menor a 0, entonces se puede aplicar el metodo. Cambio de signo
-        c=0 # Creo que es un contador
-        Xm=(Xi+Xs)/2 #Nueva aproximacion de la raiz
-        x=Xm         # X = el nuevo valor           
-        fe=eval(Fun) #Evalua la funcion en el nuevo valor de x
-        E=100
-        data.append([c, Xm, fe, E])
+    # Convertimos la cadena de la función a una expresión sympy
+    x = sp.symbols('x')
+    func = sp.sympify(Funcion)
 
-        while E>Tol and fe!=0 and c<Niter:
-            if fi*fe<0: #Significa que la funcion cambia de signo 
-                Xs=Xm #Cambia el valor de Xs con el Xm actual (En otras palabras es como tener un nuevo B)
-                x=Xs #Asigna a x el valor del nuevo Xs (nuevo B)   
-                fs=eval(Fun) #Evalua la funcion en el nuevo valor de x
+    # Evaluamos la función en los extremos del intervalo
+    fi = func.subs(x, Xi)
+    fs = func.subs(x, Xs)
+
+    # Verificamos si alguno de los extremos es raíz
+    if fi == 0:
+        s = Xi
+        E = 0
+        print(Xi, "es raiz de f(x)")
+    elif fs == 0:
+        s = Xs
+        E = 0
+        print(Xs, "es raiz de f(x)")
+    elif fs * fi < 0:
+        c = 0
+        Xm = (Xi + Xs) / 2
+        Xmar.append(Xm)
+        fe = func.subs(x, Xm)
+        fm.append(fe)
+        E.append(100)
+
+        # Comenzamos las iteraciones de bisección
+        while E[c] > Tol and fe != 0 and c < Niter:
+            if fi * fe < 0:
+                Xs = Xm
+                fs = func.subs(x, Xs)
             else:
-                Xi=Xm #No cambia de signo entonces sigue siendo una A
-                x=Xi #Asigna a x el el valor del nuevo Xi (nuevo A)
-                fs=eval(Fun) #Evalua la funcion en el nuevo valor de x
-            Xa=Xm #X auxiliar para calcular el error
-            Xm=(Xi+Xs)/2 #Nueva aproximacion de la raiz
-            x=Xm #X a evaluar
-            fe=eval(Fun) #Evalua la funcion en el nuevo valor de x
-            Error=abs(Xm-Xa) #CAlcula el error
-            c=c+1 #Aumenta el contador
-            data.append([c, Xm, fe, Error])
-        if fe==0: #Encontro raiz
-            s=x
-            print(s,"es raiz de f(x)")
-        elif Error<Tol: #Es una aproximacion con la presicion deseada
-            s=x
-            print(s,"es una aproximacion de un raiz de f(x) con una tolerancia", Tol)
-        else: #Fracaso
-            s=x
-            print("Fracaso en ",Niter, " iteraciones ") 
-    else: 
+                Xi = Xm
+                fi = func.subs(x, Xi)
+
+            Xa = Xm
+            Xm = (Xi + Xs) / 2
+            Xmar.append(Xm)
+            fe = func.subs(x, Xm)
+            fm.append(fe)
+            Error = abs(Xm - Xa)
+            E.append(Error)
+            c = c + 1
+
+            if fe == 0:
+                s = Xm
+                print(s, "es raiz de f(x)", "En iteraciones: ", c + 1)
+            elif Error < Tol:
+                s = Xm
+                print(s, "es una aproximacion de un raiz de f(x) con una tolerancia", Tol, "En iteraciones: ",
+                      c + 1)
+                print("Fm", fm)
+                print("Error", E)
+                print("Xmi: ", Xmar)
+            elif c == Niter:
+                s = Xm
+                print("Fracaso en ", Niter, " iteraciones ")
+
+    else:
         print("El intervalo es inadecuado")
-    
-    df = pd.DataFrame(data, columns=['Iteración', 'Xm', 'f(Xm)', 'Error'])
+
+    # Creamos un DataFrame con los resultados de las iteraciones
+    df = pd.DataFrame(
+        {"Iteración": range(1, c + 2), "Xm": Xmar, "f(Xm)": fm, "Error": E}
+    )
+
     return df
+
+# Ejemplo de uso:
+# resultados_biseccion = metodo_biseccion(Xi=0, Xs=1, Tol=0.0001, Niter=10, Funcion="x**2 - 2")
+# print(resultados_biseccion)
+
+
+# Ejemplo de uso:
+# resultados_biseccion = metodo_biseccion(Xi=0, Xs=1, Tol=0.0001, Niter=10, Funcion="x**2 - 2")
+# print(resultados_biseccion)
+#print(metodo_biseccion(2,4,5e-5,100,"(x**2) -13"))
