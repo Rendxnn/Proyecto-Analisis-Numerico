@@ -1,30 +1,44 @@
+import sympy as sp
 import pandas as pd
-import numpy as np
-import math
 
-def puntofijo_method(X0, Tol, Niter, Fun, g):
-    data = [] # This will store our data
-    x=X0
-    f=eval(Fun)
-    c=0
-    Error=100               
-    data.append([c, x, f, Error])
-
-    while Error>Tol and f!=0 and c<Niter:
-        x=eval(g)
-        fe=eval(Fun)
-        c=c+1
-        Error=abs(x-data[c-1][1])
-        data.append([c, x, fe, Error])	
-    if fe==0:
-        s=x
-        print(s,"es raiz de f(x)")
-    elif Error<Tol:
-        s=x
-        print(s,"es una aproximacion de un raiz de f(x) con una tolerancia", Tol)
+def puntofijo_method(funcion, g, x0, tol, niter):
+    x0 = float(x0)
+    tol = float(tol)
+    niter = int(niter)
+    
+    x = sp.symbols('x')
+    func = sp.sympify(funcion)
+    g_func = sp.sympify(g)
+    
+    f = sp.lambdify(x, func, "numpy")
+    g = sp.lambdify(x, g_func, "numpy")
+    
+    tabla_iteraciones = []
+    E = float('inf')
+    i = 0
+    
+    while i < niter and E > tol:
+        x1 = g(x0)
+        fx1 = f(x1)
+        E = abs(x1 - x0)
+        
+        tabla_iteraciones.append([i, x0, x1, fx1, E])
+        
+        if E < tol:
+            break
+        
+        x0 = x1
+        i += 1
+    
+    if i >= niter:
+        print("El método de punto fijo no converge después de", niter, "iteraciones.")
     else:
-        s=x
-        print("Fracaso en ",Niter, " iteraciones ") 
-
-    df = pd.DataFrame(data, columns=['Iteración', 'Xn', 'f(Xn)', 'Error'])
+        print("Raíz encontrada en:", x1)
+        print("Número de iteraciones:", i)
+    
+    df = pd.DataFrame(tabla_iteraciones, columns=["Iteración", "x0", "x1", "f(x1)", "Error"])
+    
     return df
+
+# Ejemplo de uso:
+#print(punto_fijo("-7*log(x)+x-13", "7*log(x)+13", 30, 0.5e-5, 100))
