@@ -3,7 +3,7 @@ import numpy as np
 import math
 import sympy as sp
 
-def metodo_biseccion(Xi, Xs, Tol, Niter, Funcion):
+def biseccion_method(Xi, Xs, Tol, Niter, Funcion):
     # Inicializamos listas para almacenar datos de cada iteración
     Xi = int(Xi)
     Xs = int(Xs)
