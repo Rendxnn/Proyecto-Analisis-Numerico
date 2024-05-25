@@ -1,59 +1,65 @@
 import pandas as pd
+import sympy as sp
 
-def busquedaincremental_method(texto_funcion, valor_inicial, delta, max_iteraciones):
-    import cmath
-    import sympy as sp
+def busquedaincremental_method(Fun, X0, Delta, Niter):
+    X0 = float(X0)
+    Delta = float(Delta)
+    Niter = int(Niter)
 
-    # Inicializar variables
-    resultados = []
-    contador = 0
-    a_x = valor_inicial
-    b_x = valor_inicial + delta
+    # Inicializamos listas para almacenar datos de cada iteración
+    iteraciones = []
+    xi_vals = []
+    fxi_vals = []
 
-    # Inicializar DataFrame
-    data = {'Iteración': [], 'a_x': [], 'b_x': [], 'f(a)': [], 'f(b)': []}
-    df = pd.DataFrame(data)
-
-    # Verificar errores
-    if max_iteraciones < 0:
-        raise ValueError("El número máximo de iteraciones es < 0")
-    if delta < 0:
-        raise ValueError("Delta es un valor incorrecto")
-
-    # Definir la función
+    # Convertimos la cadena de la función a una expresión sympy
     x = sp.symbols('x')
-    funcion = sp.sympify(texto_funcion)
+    func = sp.sympify(Fun)
 
-    # Evaluar la función en a y b
-    f_a = funcion.subs(x, a_x)
-    f_b = funcion.subs(x, b_x)
+    # Evaluamos la función en el punto inicial
+    f0 = func.subs(x, X0)
 
-    # Verificar si f(a) o f(b) es imaginario
-    if cmath.phase(f_a) != 0:
-        raise ValueError(f"f(a) no está definido en el dominio de la función: xi = {a_x}")
-    if cmath.phase(f_b) != 0:
-        raise ValueError(f"f(b) no está definido en el dominio de la función: xi = {b_x}")
+    if f0 == 0:
+        print(X0, "es raiz de f(x)")
+        iteraciones.append(0)
+        xi_vals.append(X0)
+        fxi_vals.append(f0)
+    else:
+        X1 = X0 + Delta
+        f1 = func.subs(x, X1)
+        i = 1
+        iteraciones.append(i)
+        xi_vals.append(X1)
+        fxi_vals.append(f1)
+        print("\n----------------TABLA----------------")
+        print("i =", i, " xi =", X1, " f(xi) =", f1)
 
-    # Bucle principal
-    while contador < max_iteraciones:
-        if f_a * f_b < 0 or f_a * f_b == 0:
-            resultados.append(f"Existe una raíz para la función en [{a_x}, {b_x}]")
+        while f0 * f1 > 0 and i < Niter:
+            X0 = X1
+            f0 = f1
+            X1 = X0 + Delta
+            f1 = func.subs(x, X1)
+            i += 1
+            iteraciones.append(i)
+            xi_vals.append(X1)
+            fxi_vals.append(f1)
+            print("i =", i, " xi =", X1, " f(xi) =", f1)
 
-        # Agregar valores al DataFrame
-        df = df.append({'Iteración': contador, 'a_x': a_x, 'b_x': b_x, 'f(a)': f_a, 'f(b)': f_b}, ignore_index=True)
+        if f1 == 0:
+            print(X1, "\nes raiz de f(x)")
+        elif f0 * f1 < 0:
+            print("\nExiste una raiz de f(x) entre ", X0, " y ", X1, "\n")
+        else:
+            print("\nFracaso en ", Niter, " iteraciones ")
 
-        a_x = b_x
-        f_a = f_b
-        b_x = b_x + delta
-        f_b = funcion.subs(x, b_x)
+    # Creamos un DataFrame con los resultados de las iteraciones
+    df = pd.DataFrame({
+        "Iteración": iteraciones,
+        "xi": xi_vals,
+        "f(xi)": fxi_vals
+    })
 
-        if cmath.phase(f_b) != 0:
-            raise ValueError(f"f(b) no está definido en el dominio de la función: xi = {b_x}")
+    return df
 
-        contador += 1
-
-    # Verificar si resultados está vacío
-    if not resultados:
-        resultados.append(f"No se encontró ninguna raíz en [{valor_inicial}, {b_x}]")
-
-    return df, resultados
+# Ejemplo de uso:
+# resultados_busqueda_incremental = busquedaincremental_method("x**2 - 4", 0, 0.5, 10)
+# print(resultados_busqueda_incremental)
