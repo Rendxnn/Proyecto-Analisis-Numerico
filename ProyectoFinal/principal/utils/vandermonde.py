@@ -24,7 +24,7 @@ def interpolacion_vandermonde(arreglo_x, arreglo_y):
             polinomio += ' + '
 
     # Creación del DataFrame para el polinomio
-    df_polinomio = pd.DataFrame([polinomio], columns=['Polinomio Interpolante'])
+    df_polinomio = pd.DataFrame([polinomio], columns=['Polinomio Solución'])
 
     # Retorno del DataFrame con el polinomio
     return df_polinomio

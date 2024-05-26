@@ -13,6 +13,7 @@ from .utils import jacobi
 from .utils import seidel
 from .utils import sor
 from .utils import vandermonde
+from .utils import newtonInterpolante
 
 import numpy as np
 from bokeh.plotting import figure
@@ -26,7 +27,8 @@ def home(request):
                            "jacobi": jacobi.jacobi_method,
                            "seidel": seidel.seidel_method,
                            "sor": sor.sor_method,
-                           "vandermonde": vandermonde.interpolacion_vandermonde  }
+                           "vandermonde": vandermonde.interpolacion_vandermonde,
+                           "newtonInterpolante": newtonInterpolante.newton_interpolante }
     metodo = request.GET.get("metodo")
     variables_metodo = None
     tabla_resultado = None

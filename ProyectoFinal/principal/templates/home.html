@@ -26,7 +26,8 @@
                     <option value="jacobi" {% if metodo == 'jacobi' %}selected{% endif %}>Jacobi</option>
                     <option value="seidel" {% if metodo == 'seidel' %}selected{% endif %}>Gauss-Seidel</option>
                     <option value="sor" {% if metodo == 'sor' %}selected{% endif %}>SOR</option>
-                    <option value="vandermonde" {% if metodo == 'vandermonde' %}selected{% endif %}>Vandermonde</option>                      
+                    <option value="vandermonde" {% if metodo == 'vandermonde' %}selected{% endif %}>Vandermonde</option>
+                    <option value="newtonInterpolante" {% if metodo == 'newtonInterpolante' %}selected{% endif %}>Newton Interpolante</option>                       
                 </select>
             </div>
             <input type="submit" class="btn btn-primary" value="Seleccionar método">
