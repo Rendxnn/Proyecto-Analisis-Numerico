@@ -1,15 +1,19 @@
 import sympy as sp
 import pandas as pd
+import math
 
 def newton_method(funcion, initial_guess, tolerance=1e-10, max_iterations=100):
-    initial_guess = int(initial_guess)
+    initial_guess = float(initial_guess)  
     tolerance = float(tolerance)
     max_iterations = int(max_iterations)
 
+
+    safe_dict = {**math.__dict__, **sp.__dict__}
+
     x = sp.symbols('x')
-    func = sp.sympify(funcion)
-    f = sp.lambdify(x, func)
-    f_prime = sp.lambdify(x, sp.diff(func, x))
+    func = sp.sympify(funcion, locals=safe_dict)
+    f = sp.lambdify(x, func, modules='sympy')
+    f_prime = sp.lambdify(x, sp.diff(func, x), modules='sympy')
 
     x_old = initial_guess
     iteration = 0
@@ -32,9 +36,12 @@ def newton_method(funcion, initial_guess, tolerance=1e-10, max_iterations=100):
         print("Raíz encontrada en:", x_new)
         print("Número de iteraciones:", iteration)
 
-    # Convertir la lista de iteraciones en un DataFrame
     columnas = ["Iteración", "x_old", "f(x_old)", "f'(x_old)", "x_new", "Error"]
     df = pd.DataFrame(tabla_iteraciones, columns=columnas)
 
     return df
 
+if __name__ == '__main__':
+    funcion = "x**2 + log(x) + 1"
+    initial_guess = 1
+    print(newton_method(funcion, initial_guess))

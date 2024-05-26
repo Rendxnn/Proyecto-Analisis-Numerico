@@ -14,10 +14,13 @@ from .utils import seidel
 from .utils import sor
 from .utils import vandermonde
 from .utils import newtonInterpolante
+import math
 
 import numpy as np
 from bokeh.plotting import figure
 from bokeh.embed import components
+from bokeh.models import Span
+
 
 def home(request):
     metodos_diccionario = {"newton": newton.newton_method, "secante": secante.metodo_secante, 
@@ -42,21 +45,40 @@ def home(request):
 
         if entradas_metodo[0]: 
 
-            tabla_resultado = metodos_diccionario[metodo](*entradas_metodo).to_html(index=False)
+            tabla_resultado = metodos_diccionario[metodo](*entradas_metodo).to_html(classes='table table-striped table-dark', index=False, justify='center')
 
     #GRAFICAR
     funcion = request.GET.get('funcion_entrada')
     script, div = None, None
     if funcion:
-        x = np.linspace(-10, 10, 400)
-        y = eval(funcion)  
+        safe_dict = {**math.__dict__, **np.__dict__}
 
-        plot = figure(title=f'Gráfica de la función {funcion}', x_axis_label='x', y_axis_label='y')
-        plot.line(x, y, legend_label=funcion, line_width=2)
-        script, div = components(plot)
+        safe_dict['x'] = np.linspace(-100, 100, 2000)
 
-    print(tabla_resultado)
+        try:
+            y = eval(funcion, {"__builtins__": None}, safe_dict)
+            plot = figure(
+                title=f'Gráfica de la función {funcion}', 
+                x_axis_label='x', 
+                y_axis_label='y', 
+            )
+            plot.line(safe_dict['x'], y, legend_label=funcion, line_width=2)
+            plot.xaxis.axis_line_width = 3
+            plot.yaxis.axis_line_width = 3
+            x_axis = Span(location=0, dimension='width', line_color='black', line_width=3)
+            plot.add_layout(x_axis)
+            y_axis = Span(location=0, dimension='height', line_color='black', line_width=3)
+            plot.add_layout(y_axis)
+            plot.x_range.start = -100
+            plot.x_range.end = 100
+            plot.y_range.start = -100
+            plot.y_range.end = 100
+            script, div = components(plot)
 
+
+        except Exception as e:
+            print(f"Error al evaluar la función: {e}")
+    
     return render(request, 'home.html', {
         "metodo": metodo,
         "variables_metodo": variables_metodo,

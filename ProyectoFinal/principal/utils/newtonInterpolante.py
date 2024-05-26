@@ -10,7 +10,7 @@ def Newtonint(x, y):
         for i in range(j - 1, n):
             Tabla[i, j] = (Tabla[i, j - 1] - Tabla[i - 1, j - 1]) / (Tabla[i, 0] - Tabla[i - j + 1, 0])
     
-    coeficientes = np.diag(Tabla[:, 1:])  # Extraer los coeficientes de la diagonal principal
+    coeficientes = np.diag(Tabla[:, 1:]) 
     return coeficientes
 
 def Newtonor(x, coef):
