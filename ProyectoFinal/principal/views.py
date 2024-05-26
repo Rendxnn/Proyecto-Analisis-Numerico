@@ -12,6 +12,7 @@ from .utils import raicesmultiples2
 from .utils import jacobi
 from .utils import seidel
 from .utils import sor
+from .utils import vandermonde
 
 import numpy as np
 from bokeh.plotting import figure
@@ -24,7 +25,8 @@ def home(request):
                            "reglafalsa": reglafalsa.reglafalsa_method, "raicesmultiples2": raicesmultiples2.raicesmultiples_method,
                            "jacobi": jacobi.jacobi_method,
                            "seidel": seidel.seidel_method,
-                           "sor": sor.sor_method  }
+                           "sor": sor.sor_method,
+                           "vandermonde": vandermonde.interpolacion_vandermonde  }
     metodo = request.GET.get("metodo")
     variables_metodo = None
     tabla_resultado = None
