@@ -24,7 +24,8 @@
                     <option value="reglafalsa" {% if metodo == 'reglafalsa' %}selected{% endif %}>Regla Falsa</option>
                     <option value="raicesmultiples2" {% if metodo == 'raicesmultiples2' %}selected{% endif %}>Raíces Múltiples</option>
                     <option value="jacobi" {% if metodo == 'jacobi' %}selected{% endif %}>Jacobi</option>
-                    <option value="seidel" {% if metodo == 'seidel' %}selected{% endif %}>Gauss Seidel</option>                    
+                    <option value="seidel" {% if metodo == 'seidel' %}selected{% endif %}>Gauss-Seidel</option>
+                    <option value="sor" {% if metodo == 'sor' %}selected{% endif %}>SOR</option>                    
                 </select>
             </div>
             <input type="submit" class="btn btn-primary" value="Seleccionar método">

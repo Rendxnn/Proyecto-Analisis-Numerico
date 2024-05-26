@@ -11,6 +11,7 @@ from .utils import reglafalsa
 from .utils import raicesmultiples2
 from .utils import jacobi
 from .utils import seidel
+from .utils import sor
 
 import numpy as np
 from bokeh.plotting import figure
@@ -21,8 +22,9 @@ def home(request):
                            "biseccion": biseccion.biseccion_method, "puntofijo": puntofijo.puntofijo_method, 
                            "busquedaincremental": busquedaincremental.busquedaincremental_method, 
                            "reglafalsa": reglafalsa.reglafalsa_method, "raicesmultiples2": raicesmultiples2.raicesmultiples_method,
-                            "jacobi": jacobi.jacobi_method,
-                            "seidel": seidel.seidel_method }
+                           "jacobi": jacobi.jacobi_method,
+                           "seidel": seidel.seidel_method,
+                           "sor": sor.sor_method  }
     metodo = request.GET.get("metodo")
     variables_metodo = None
     tabla_resultado = None
