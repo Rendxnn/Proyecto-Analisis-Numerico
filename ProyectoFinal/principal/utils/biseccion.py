@@ -5,8 +5,8 @@ import sympy as sp
 
 def biseccion_method(funcion, Xi, Xs, Tol, Niter):
     # Inicializamos listas para almacenar datos de cada iteración
-    Xi = int(Xi)
-    Xs = int(Xs)
+    Xi = float(Xi)
+    Xs = float(Xs)
     Niter = int(Niter)
     Tol = float(Tol)
 

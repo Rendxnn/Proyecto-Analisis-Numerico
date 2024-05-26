@@ -14,8 +14,9 @@ from .utils import seidel
 from .utils import sor
 from .utils import vandermonde
 from .utils import newtonInterpolante
-import math
+from .utils import lagrange
 
+import math
 import numpy as np
 from bokeh.plotting import figure
 from bokeh.embed import components
@@ -31,7 +32,8 @@ def home(request):
                            "seidel": seidel.seidel_method,
                            "sor": sor.sor_method,
                            "vandermonde": vandermonde.interpolacion_vandermonde,
-                           "newtonInterpolante": newtonInterpolante.newton_interpolante }
+                           "newtonInterpolante": newtonInterpolante.newton_interpolante,
+                           "lagrange": lagrange.lagrange_interpolation }
     metodo = request.GET.get("metodo")
     variables_metodo = None
     tabla_resultado = None
