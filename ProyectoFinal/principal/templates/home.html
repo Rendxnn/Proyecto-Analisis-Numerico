@@ -46,7 +46,9 @@
                     <option value="sor" {% if metodo == 'sor' %}selected{% endif %}>SOR</option>
                     <option value="vandermonde" {% if metodo == 'vandermonde' %}selected{% endif %}>Vandermonde</option>
                     <option value="newtonInterpolante" {% if metodo == 'newtonInterpolante' %}selected{% endif %}>Newton Interpolante</option>
-                    <option value="lagrange" {% if metodo == 'lagrange' %}selected{% endif %}>Lagrange</option>                        
+                    <option value="lagrange" {% if metodo == 'lagrange' %}selected{% endif %}>Lagrange</option>
+                    <option value="splineLineal" {% if metodo == 'splineLineal' %}selected{% endif %}>Spline Lineal</option>
+                    <option value="splineCubico" {% if metodo == 'splineCubico' %}selected{% endif %}>Spline Cubico</option>                           
                 </select>
             </div>
             <input type="submit" class="btn btn-primary" value="Seleccionar método">

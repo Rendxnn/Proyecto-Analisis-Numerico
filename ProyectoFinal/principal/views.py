@@ -15,6 +15,8 @@ from .utils import sor
 from .utils import vandermonde
 from .utils import newtonInterpolante
 from .utils import lagrange
+from .utils import splineCubico
+from .utils import splineLineal
 
 import math
 import numpy as np
@@ -33,7 +35,9 @@ def home(request):
                            "sor": sor.sor_method,
                            "vandermonde": vandermonde.interpolacion_vandermonde,
                            "newtonInterpolante": newtonInterpolante.newton_interpolante,
-                           "lagrange": lagrange.lagrange_interpolation }
+                           "lagrange": lagrange.lagrange_interpolation,
+                           "splineCubico": splineCubico.spline_cubico,
+                           "splineLineal": splineLineal.spline_lineal }
     metodo = request.GET.get("metodo")
     variables_metodo = None
     tabla_resultado = None
