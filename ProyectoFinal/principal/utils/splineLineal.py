@@ -41,3 +41,10 @@ def spline_lineal(arreglo_x, arreglo_y):
     df = pd.DataFrame({"Intervalo": intervalos, "Polinomio": polinomios})
     
     return df
+
+if __name__ == "__main__":
+    arreglo_x = "[1, 2, 3, 4]"
+    arreglo_y = "[2, 3, 5, 4]"
+
+    resultados_spline_lineal = spline_lineal(arreglo_x, arreglo_y)
+    print(resultados_spline_lineal)

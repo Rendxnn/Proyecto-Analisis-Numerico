@@ -41,4 +41,5 @@ def puntofijo_method(funcion, g, x0, tol, niter):
     return df
 
 # Ejemplo de uso:
-#print(punto_fijo("-7*log(x)+x-13", "7*log(x)+13", 30, 0.5e-5, 100))
+if __name__ == "__main__":
+    print(puntofijo_method("-7*log(x)+x-13", "7*log(x)+13", 30, 0.5e-5, 100))

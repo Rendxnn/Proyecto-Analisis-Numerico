@@ -75,4 +75,5 @@ def reglafalsa_method(funcion, Xi, Xs, Tol, Niter):
     return df
 
 # Ejemplo de uso:
-# print(reglafalsa_method(0, 2, 0.0001, 100, "x**3 - 2*x**2 + x - 3"))
+if __name__ == "__main__":
+    print(reglafalsa_method("log(x)", 0.1, 10, 5e-10, 100))

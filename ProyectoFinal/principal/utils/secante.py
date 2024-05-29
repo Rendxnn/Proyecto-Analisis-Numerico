@@ -29,3 +29,6 @@ def metodo_secante(funcion, x0, x1, tolerancia, numero_iteraciones):
 		print("El método de la secante no converge después de", numero_iteraciones, "iteraciones.")
 
 	return pd.DataFrame(tabla_iteraciones, columns=["Iteración", "x0", "x1", "Error"])
+
+if __name__ == "__main__":
+	print(metodo_secante("log(x) + x**2 - 3", 1, 1000, 5e-10, 100))

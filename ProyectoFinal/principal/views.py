@@ -44,8 +44,7 @@ def home(request):
     variables_metodo = None
     tabla_resultado = None
 
-    if "descargar" in request.GET:
-        print("presionado")
+    
 
     if metodo:
         parametros_metodo = inspect.signature(metodos_diccionario[metodo]).parameters.items()
@@ -60,6 +59,9 @@ def home(request):
 
             except:
                 tabla_resultado = pd.DataFrame([["papi lo totió con ese input, probá otra cosa más bien"]], columns=['ERROR']).to_html(classes='table table-striped table-dark', index=False, justify='center')
+
+
+        
 
     #GRAFICAR
     funcion = request.GET.get('funcion_entrada')

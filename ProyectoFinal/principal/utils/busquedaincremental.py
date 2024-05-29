@@ -13,13 +13,17 @@ def busquedaincremental_method(funcion, X0, Delta, Niter):
 
     # Convertimos la cadena de la función a una expresión sympy
     x = sp.symbols('x')
-    func = sp.sympify(funcion)
+    try:
+        func = sp.sympify(funcion)
+    except sp.SympifyError:
+        print("Error: La función proporcionada no es válida.")
+        return None
 
     # Evaluamos la función en el punto inicial
     f0 = func.subs(x, X0)
 
     if f0 == 0:
-        print(X0, "es raiz de f(x)")
+        print(X0, "es raíz de f(x)")
         iteraciones.append(0)
         xi_vals.append(X0)
         fxi_vals.append(f0)
@@ -45,9 +49,9 @@ def busquedaincremental_method(funcion, X0, Delta, Niter):
             print("i =", i, " xi =", X1, " f(xi) =", f1)
 
         if f1 == 0:
-            print(X1, "\nes raiz de f(x)")
+            print(X1, "\nes raíz de f(x)")
         elif f0 * f1 < 0:
-            print("\nExiste una raiz de f(x) entre ", X0, " y ", X1, "\n")
+            print("\nExiste una raíz de f(x) entre ", X0, " y ", X1, "\n")
         else:
             print("\nFracaso en ", Niter, " iteraciones ")
 
@@ -59,7 +63,6 @@ def busquedaincremental_method(funcion, X0, Delta, Niter):
     })
 
     return df
-
 # Ejemplo de uso:
 # resultados_busqueda_incremental = busquedaincremental_method("x**2 - 4", 0, 0.5, 10)
 # print(resultados_busqueda_incremental)
