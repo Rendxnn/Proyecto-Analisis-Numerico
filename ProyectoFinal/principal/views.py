@@ -17,6 +17,7 @@ from .utils import newtonInterpolante
 from .utils import lagrange
 from .utils import splineCubico
 from .utils import splineLineal
+import pandas as pd
 
 import math
 import numpy as np
@@ -39,8 +40,12 @@ def home(request):
                            "splineCubico": splineCubico.spline_cubico,
                            "splineLineal": splineLineal.spline_lineal }
     metodo = request.GET.get("metodo")
+    descargar = request.GET.get("descargar")
     variables_metodo = None
     tabla_resultado = None
+
+    if "descargar" in request.GET:
+        print("presionado")
 
     if metodo:
         parametros_metodo = inspect.signature(metodos_diccionario[metodo]).parameters.items()
@@ -50,8 +55,11 @@ def home(request):
         entradas_metodo = [request.GET.get(f'{x}_entrada') for x in variables_metodo]
 
         if entradas_metodo[0]: 
+            try:
+                tabla_resultado = metodos_diccionario[metodo](*entradas_metodo).to_html(classes='table table-striped table-dark', index=False, justify='center')
 
-            tabla_resultado = metodos_diccionario[metodo](*entradas_metodo).to_html(classes='table table-striped table-dark', index=False, justify='center')
+            except:
+                tabla_resultado = pd.DataFrame([["papi lo totió con ese input, probá otra cosa más bien"]], columns=['ERROR']).to_html(classes='table table-striped table-dark', index=False, justify='center')
 
     #GRAFICAR
     funcion = request.GET.get('funcion_entrada')
